@@ -1,0 +1,16 @@
+known_hosts: []
+
+identities:
+  - file: /path/to/identity.rsa
+    passphrase: optional_passphrase
+  - ~/identity/without/passphrase.rsa
+
+tunnels:
+  - username: inventivetalent
+    host: 123.456.789
+    port: 22
+    key: my_identity
+    password: admin123
+    localPort: 1234
+    remoteHost: 789.456.123
+    remotePort: 1234

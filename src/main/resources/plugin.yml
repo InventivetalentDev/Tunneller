@@ -1,0 +1,6 @@
+name: SpigotTunnel
+main: org.inventivetalent.spigottunnel.TunnelPlugin
+version: ${project.version}
+author: inventivetalent
+load: STARTUP
+api-version: 1.13
