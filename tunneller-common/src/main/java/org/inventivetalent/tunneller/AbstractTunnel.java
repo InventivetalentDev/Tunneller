@@ -1,30 +1,32 @@
-package org.inventivetalent.spigottunnel;
+package org.inventivetalent.tunneller;
 
 import com.jcraft.jsch.*;
-import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class TunnelPlugin extends JavaPlugin {
+public  class AbstractTunnel {
 
-	JSch jSch;
+	private Logger logger;
 
-	Set<Session> activeSessions = new HashSet<>();
+	protected JSch               jSch;
+	protected Set<Session>       activeSessions;
+	protected Map<String, String> knownHosts = new HashMap<>();
 
-	Map<String, String> knownHosts = new HashMap<>();
+	protected AbstractTunnel() {
+		this.jSch = new JSch();
+	}
 
-	@Override
-	public void onLoad() {
-		saveDefaultConfig();
+	protected AbstractTunnel(Logger logger) {
+		this();
+		this.logger=logger;
+	}
 
-		jSch = new JSch();
 
-		FileConfiguration config = getConfig();
 
-		List<Map<String,String>> knownHostsList = (List<Map<String, String>>) config.getList("known_hosts");
+	boolean load(List<Map<String,String>> knownHostsList,List identities,List<Map<String, Object>> tunnels) {
+		getLogger().info("Setting known hosts...");
 		for (Map<String, String> knownHost : knownHostsList) {
 			knownHost.put((String) knownHost.get("host"), (String) knownHost.get("key"));
 
@@ -35,9 +37,7 @@ public class TunnelPlugin extends JavaPlugin {
 			}
 		}
 
-
 		getLogger().info("Loading identities...");
-		List identities = config.getList("identities");
 		for (Object identity : identities) {
 			if (identity instanceof String) {// only a file
 				try {
@@ -70,7 +70,6 @@ public class TunnelPlugin extends JavaPlugin {
 		}
 
 		getLogger().info("Creating tunnels...");
-		List<Map<String, Object>> tunnels = (List<Map<String, Object>>) config.getList("tunnels");
 		for (Map<String, Object> tunnel : tunnels) {
 			try {
 				Session session = jSch.getSession((String) tunnel.get("username"), (String) tunnel.get("host"), (int) tunnel.getOrDefault("port", 22));
@@ -91,19 +90,13 @@ public class TunnelPlugin extends JavaPlugin {
 				getLogger().log(Level.WARNING, "Failed to create session " + tunnel.get("username") + "@" + tunnel.get("host"), e);
 			}
 		}
+
+		return true;
 	}
 
-	@Override
-	public void onEnable() {
-		if (jSch == null) {
-			getLogger().severe("Failed to initialize JSch. Disabling.");
-			Bukkit.getPluginManager().disablePlugin(this);
-			return;
-		}
-
+	boolean enable(List<Map<String, String>> knownHostList) {
 		getLogger().info("There are " + activeSessions.size() + " active sessions");
 
-		List<Map<String, String>> knownHostList = new ArrayList<>();
 		for (HostKey key : jSch.getHostKeyRepository().getHostKey()) {
 			knownHosts.put(key.getHost(), key.getKey());
 
@@ -112,24 +105,30 @@ public class TunnelPlugin extends JavaPlugin {
 			knownHost.put("key", key.getKey());
 			knownHostList.add(knownHost);
 		}
-		getConfig().set("known_hosts", knownHostList);
-		saveConfig();
+		// the knownHost list is meant to be initialized by the caller and then saved back to the config
+		return true;
 	}
 
-	@Override
-	public void onDisable() {
-		if (jSch != null) {
-			getLogger().info("Disconnecting sessions...");
-			for (Session session : activeSessions) {
-				try {
-					session.disconnect();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+	boolean disable() {
+		getLogger().info("Disconnecting sessions...");
+		for (Session session : activeSessions) {
+			try {
+				session.disconnect();
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-
 		}
+
+		return true;
 	}
+
+	Logger getLogger() {
+		if (this.logger == null) {
+			this.logger = Logger.getLogger("Tunneller");
+		}
+		return this.logger;
+	}
+	
 
 	static class CommandLineUserInfo implements UserInfo {
 
@@ -173,6 +172,5 @@ public class TunnelPlugin extends JavaPlugin {
 			System.out.println("[SSH] ("+username+"@"+host+") " + s);
 		}
 	}
-
 
 }

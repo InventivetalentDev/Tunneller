@@ -1,5 +1,5 @@
-name: SpigotTunnel
-main: org.inventivetalent.spigottunnel.TunnelPlugin
+name: Tunneller
+main: org.inventivetalent.tunneller.SpigotTunnel
 version: ${project.version}
 author: inventivetalent
 load: STARTUP

@@ -1,0 +1,4 @@
+name: Tunneller
+main: org.inventivetalent.tunneller.BungeeTunnel
+version: ${project.version}
+author: inventivetalent

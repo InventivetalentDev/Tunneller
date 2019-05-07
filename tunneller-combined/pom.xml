@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>tunneller</artifactId>
+        <groupId>org.inventivetalent</groupId>
+        <version>${tunneller.version}</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>tunneller-combined</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.inventivetalent</groupId>
+            <artifactId>tunneller-common</artifactId>
+            <version>${tunneller.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.inventivetalent</groupId>
+            <artifactId>tunneller-spigot</artifactId>
+            <version>${tunneller.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.inventivetalent</groupId>
+            <artifactId>tunneller-bungee</artifactId>
+            <version>${tunneller.version}</version>
+        </dependency>
+    </dependencies>
+
+</project>

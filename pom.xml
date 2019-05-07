@@ -5,8 +5,20 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.inventivetalent</groupId>
-    <artifactId>spigot-tunnel</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <artifactId>tunneller</artifactId>
+    <packaging>pom</packaging>
+    <version>${tunneller.version}</version>
+
+    <properties>
+        <tunneller.version>1.0.0-SNAPSHOT</tunneller.version>
+    </properties>
+
+    <modules>
+        <module>tunneller-common</module>
+        <module>tunneller-spigot</module>
+        <module>tunneller-bungee</module>
+        <module>tunneller-combined</module>
+    </modules>
 
 
     <build>
@@ -23,6 +35,7 @@
                 <includes>
                     <include>plugin.yml</include>
                     <include>config.yml</include>
+                    <include>bungee.yml</include>
                 </includes>
             </resource>
         </resources>
@@ -49,7 +62,7 @@
                         <configuration>
                             <artifactSet>
                                 <includes>
-                                    <include>org.inventivetalent.spigottunnel:**</include>
+                                    <include>org.inventivetalent:tunneller**</include>
 
                                     <include>com.jcraft:**</include>
                                 </includes>
@@ -61,21 +74,7 @@
         </plugins>
     </build>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot</artifactId>
-            <version>1.13.2-R0.1-SNAPSHOT</version>
-        </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.jcraft/jsch -->
-        <dependency>
-            <groupId>com.jcraft</groupId>
-            <artifactId>jsch</artifactId>
-            <version>0.1.55</version>
-        </dependency>
-
-    </dependencies>
 
     <repositories>
         <repository>
