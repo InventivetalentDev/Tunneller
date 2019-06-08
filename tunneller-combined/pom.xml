@@ -11,6 +11,11 @@
 
     <artifactId>tunneller-combined</artifactId>
 
+
+    <build>
+        <finalName>Tunneler_v${project.version}</finalName>
+    </build>
+
     <dependencies>
         <dependency>
             <groupId>org.inventivetalent</groupId>
