@@ -11,7 +11,7 @@ public  class AbstractTunnel {
 	private Logger logger;
 
 	protected JSch               jSch;
-	protected Set<Session>       activeSessions;
+	protected Set<Session>       activeSessions = new HashSet<>();
 	protected Map<String, String> knownHosts = new HashMap<>();
 
 	protected AbstractTunnel() {
